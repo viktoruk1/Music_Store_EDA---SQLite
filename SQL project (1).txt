@@ -1,0 +1,89 @@
+/* Amount spent overall by each country */
+
+select c.country,
+	sum(i.total) total
+from customers c
+join invoices i on c.customerid = i.CustomerId
+group by 1
+order by 2 desc;
+
+/* Customers,their respective countries and total amount spent */
+
+SELECT C.FIRSTNAME ||' '|| C.LASTNAME AS [FULL NAME],
+	C.COUNTRY,
+	SUM(I.TOTAL) AS TOTAL
+FROM customers C
+JOIN invoices I ON C.CUSTOMERID = I.CustomerId
+GROUP BY 1,2
+ORDER BY 3 DESC;
+
+/* Artist that had the most tracks worldwide */
+
+select ar.Name [Artsit Name],
+	COUNT(t.Name) Tracks
+from artists ar
+join albums al on ar.artistid = al.artistid
+join tracks t on al.albumid = t.albumid 
+join genres g on t.genreid = g.genreid
+group by 1
+order by 2 desc
+
+
+
+Create view Artist_Tracks as 
+	select ar.Name [Artsit Name],
+	COUNT(t.Name) Tracks,
+	t.composer Composers
+from artists ar
+join albums al on ar.artistid = al.artistid
+join tracks t on al.albumid = t.albumid 
+join genres g on t.genreid = g.genreid
+group by 1
+order by 2 desc
+
+/* From the Artist_Tracks View, these are artist and their composers with 50 tracks above */
+
+SELECT
+	*
+FROM 
+	Artist_Tracks
+WHERE
+	tracks > 50 and composers not null
+ 
+ 
+ 
+ /* Mailing details of customers from USA */
+
+SELECT
+FirstName || ' ' || LastName
+|| ' ' 
+|| Address || ', ' || City || ', ' || State
+|| ' ' 
+|| SUBSTR(PostalCode,1,5) AS
+[Mail Info] 
+FROM 
+	customers c
+WHERE
+	country = 'USA'
+ 
+ 
+/* Number of American customers responsible for exceeding the average amount in 2011 */
+SELECT 
+	InvoiceDate,
+	Total,
+	BillingCountry,
+	BillingCity
+FROM 
+	invoices
+WHERE 
+	Total >
+	(select avg(total) 
+	from
+	invoices
+	where 
+	InvoiceDate between '2011-01-01' and '2011-
+	03-31')
+AND 
+	BillingCity = 'USA'
+ORDER BY
+	Total DESC
