@@ -1,1 +1,1 @@
-# A Music Store Mini Project_SQL
+# Music Store: Exploratory Data Analysis
